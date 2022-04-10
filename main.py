@@ -10,6 +10,7 @@ Nathan :
 Victor :
 - Creer les graphiques (en js ou images mais pas ouf)
 - Interface utilisateur (flask)
+    - Possibilité de rentrer un csv à la main ou de récup csv d'une page
 
 """
 
