@@ -8,7 +8,7 @@ Nathan :
 
 
 Victor :
-- Creer les graphiques (en js ou images mais pas ouf)
+- Creer les graphiques (en js ou images mais pas ouf(et ça c'est pas cool ;-;))
 - Interface utilisateur (flask)
     - Possibilité de rentrer un csv à la main ou de récup csv d'une page
 
