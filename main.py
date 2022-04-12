@@ -33,6 +33,7 @@ def getCsvFile(url):
             csv_links.append(link.get('href'))
     return csv_links
 
+#On verra car on essaye de generer avec JavaScript
 def generateChart(csv_file):
     """generate a chart from a csv file"""
     df = pandas.read_csv(csv_file)
