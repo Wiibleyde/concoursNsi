@@ -18,6 +18,8 @@ import flask
 import random
 import sqlite3
 import csv
+import pandas
+
 
 def getCsvFile(url):
     """get all csv file of a html page"""
@@ -33,7 +35,12 @@ def getCsvFile(url):
 
 def generateChart(csv_file):
     """generate a chart from a csv file"""
-    import pandas as pd
-    df = pd.read_csv(csv_file)
+    df = pandas.read_csv(csv_file)
     df.plot()
     return df
+
+def createIndexPage():
+    """create the main page"""
+    return flask.render_template('index.html')
+
+
