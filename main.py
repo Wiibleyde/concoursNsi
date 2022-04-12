@@ -31,3 +31,9 @@ def getCsvFile(url):
             csv_links.append(link.get('href'))
     return csv_links
 
+def generateChart(csv_file):
+    """generate a chart from a csv file"""
+    import pandas as pd
+    df = pd.read_csv(csv_file)
+    df.plot()
+    return df
