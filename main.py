@@ -19,10 +19,15 @@ import random
 import sqlite3
 import csv
 
-def analyse():
-    """Analyse d'un fichier csv pour proposer des graphiques selon les colonnes
-    # TODO :
-    # - Recuperer les donnees dans un fichier csv
-    # - Analyser les donnees pour proposer des graphiques
-    # - Retourner les graphiques
-    return graphiques"""
+def getCsvFile(url):
+    """get all csv file of a html page"""
+    import requests
+    from bs4 import BeautifulSoup
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    csv_links = []
+    for link in soup.find_all('a'):
+        if link.get('href').endswith('.csv'):
+            csv_links.append(link.get('href'))
+    return csv_links
+
