@@ -19,12 +19,12 @@ import random
 import sqlite3
 import csv
 import pandas
+import requests
+from bs4 import BeautifulSoup
 
 
 def getCsvFile(url):
     """get all csv file of a html page"""
-    import requests
-    from bs4 import BeautifulSoup
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
     csv_links = []
