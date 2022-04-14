@@ -1,12 +1,22 @@
 """ TODO
 (- Ajout des donnees dans base de donnees)
 Nathan :
-- Recuperer donnees (web parsing)
-- Analyser pour proposer des graphiques
+- Recuperer donnees (web parsing) (et les mettre dans une base de donnees)
+- Analyser pour proposer des graphiques 
+
+
 Victor :
-- Creer les graphiques (en js ou images mais pas ouf(et ça c'est pas cool ;-;))
+- Creer les graphiques (en js ou images mais pas ouf(et ça c'est pas cool ;-;)) 
 - Interface utilisateur (flask)
     - Possibilité de rentrer un csv à la main ou de récup csv d'une page
+
+Plan Flask :
+- Creer une page d'accueil
+- Creer un page pour rentrer des fichier csv à partir d'une page web ou d'un fichier mis à la main
+- Creer une page qui propose les graphiques à partir du fichier csv
+- Creer une page de visualisation avec un bouton pour revenir à la page d'accueil
+
+
 """
 
 from flask import Flask, render_template
