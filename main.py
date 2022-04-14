@@ -1,7 +1,7 @@
 """ TODO
 (- Ajout des donnees dans base de donnees)
 Nathan :
-- Recuperer donnees (web parsing) et les mettre dans une base de donnees
+- Recuperer donnees (web parsing) (et les mettre dans une base de donnees)
 - Analyser pour proposer des graphiques 
 
 
