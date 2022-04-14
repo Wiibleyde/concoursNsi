@@ -54,9 +54,13 @@ def analyseCsv(csv_file):
 #     return df
 
 
-@app.route("/", methods=["GET", "POST"])
-def Acceuil():
-    return render_template("index.html")
+@app.route("/")
+def Data_Analyser():
+    return render_template("Data_Analyser.html")
+
+@app.route("/Import_CSV")
+def Import_CSV():
+    return render_template("Import_CSV.html")
 
 if __name__ == "__main__":
     app.run()
