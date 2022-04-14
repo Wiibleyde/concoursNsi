@@ -50,9 +50,3 @@ def analyseCsv(csv_file):
 def createIndexPage():
     """create the main page"""
     return flask.render_template('index.html')
-
-def createCsvPage():
-    """create the csv page"""
-    return flask.render_template('csv.html')
-
-
