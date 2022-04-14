@@ -9,7 +9,7 @@ Victor :
     - Possibilité de rentrer un csv à la main ou de récup csv d'une page
 """
 
-import flask
+from flask import Flask, render_template
 import random
 import sqlite3
 import csv
@@ -17,6 +17,9 @@ import pandas
 import requests
 from bs4 import BeautifulSoup
 
+app = Flask(__name__)
+
+app.config["SECRET_KEY"] = "MotDePasse"
 
 def getCsvFile(url):
     """get all csv file of a html page"""
@@ -41,7 +44,9 @@ def analyseCsv(csv_file):
 #     return df
 
 
+@app.route("/", methods=["GET", "POST"])
+def Acceuil():
+    return render_template("index.html")
 
-def createIndexPage():
-    """create the main page"""
-    return flask.render_template('index.html')
+if __name__ == "__main__":
+    app.run()
