@@ -54,11 +54,11 @@ def analyseCsv(csv_file):
 #     return df
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def Data_Analyser():
     return render_template("Data_Analyser.html")
 
-@app.route("/Import_CSV")
+@app.route("/Import_CSV", methods=["GET", "POST"])
 def Import_CSV():
     return render_template("Import_CSV.html")
 
