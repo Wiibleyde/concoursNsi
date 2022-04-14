@@ -1,8 +1,8 @@
 /* css */
 
 :root {
-    --clr-neon: hsl(317 100% 54%);
-    --clr-bg: hsl(323 21% 16%);
+    --clr-neon: rgb(13, 139, 8);
+    --clr-bg: black;
   }
   
   *,
@@ -12,17 +12,17 @@
   }
   
   body {
-    min-height: 100vh;
+    min-height: 80vh;
     display: grid;
     place-items: center;
     background: var(--clr-bg);
     font-family: "Balsamiq Sans", cursive;
     color: var(--clr-neon);
-    padding-right: 10rem;
+    padding-top: 15vh;
   }
   
   .neon-button {
-    font-size: 4rem;
+    font-size: 3rem;
   
     display: inline-block;
     cursor: pointer;
