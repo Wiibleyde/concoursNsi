@@ -33,12 +33,19 @@ def getCsvFile(url):
             csv_links.append(link.get('href'))
     return csv_links
 
-#On verra car on essaye de generer avec JavaScript
-def generateChart(csv_file):
-    """generate a chart from a csv file"""
+def analyseCsv(csv_file):
+    """analyse a csv file"""
     df = pandas.read_csv(csv_file)
-    df.plot()
     return df
+
+# #On verra car on essaye de generer avec JavaScript
+# def generateChart(csv_file):
+#     """generate a chart from a csv file"""
+#     df = pandas.read_csv(csv_file)
+#     df.plot()
+#     return df
+
+
 
 def createIndexPage():
     """create the main page"""
