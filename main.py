@@ -6,15 +6,14 @@ Nathan :
 
 
 Victor :
-- Creer les graphiques (en js ou images mais pas ouf(et ça c'est pas cool ;-;)) 
-- Interface utilisateur (flask)
-    - Possibilité de rentrer un csv à la main ou de récup csv d'une page
+(En cours) - Afficher des graph (en js ou images mais pas ouf(et ça c'est pas cool ;-;)) 
+(Terminé) - Interface utilisateur (flask) 
+    (Terminé) - Possibilité de rentrer un csv à la main ou de récup csv d'une page
 
-Plan Flask :
-- Creer une page d'accueil
-- Creer un page pour rentrer des fichier csv à partir d'une page web ou d'un fichier mis à la main
-- Creer une page qui propose les graphiques à partir du fichier csv
-- Creer une page de visualisation avec un bouton pour revenir à la page d'accueil
+Plan Flaskb (Victor) :
+(Terminé) - Creer une page d'accueil 
+(Terminé) - Creer un page pour rentrer des fichier csv à partir d'une page web ou d'un fichier mis à la main 
+(Terminé) - Creer une page qui propose les graphiques à partir du fichier csv avec un bouton pour revenir a l'acceuil 
 
 
 """
