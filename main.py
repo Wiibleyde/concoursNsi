@@ -65,7 +65,10 @@ def Import_CSV():
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
     lien = request.form.get("link")
-    print(lien)
+    if lien == "":
+        print('empty')
+    else:
+        print(lien)
     return render_template("Show_Graph.html")
 
 if __name__ == "__main__":
