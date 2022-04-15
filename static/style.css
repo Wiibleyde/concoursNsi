@@ -14,6 +14,7 @@
   body {
     min-height: 80vh;
     display: grid;
+    text-align: center;
     place-items: center;
     background: var(--clr-bg);
     font-family: "Balsamiq Sans", cursive;
@@ -33,6 +34,7 @@
     text-shadow: 0 0 0.125em, 0 0 0.45em currentColor;
     box-shadow: inset 0 0 0.5em 0 var(--clr-neon), 0 0 0.5em 0 var(--clr-neon);
     position: relative;
+    background-color: unset;
   }
   
   .neon-button::before {
@@ -169,3 +171,4 @@
   .neon-input-file-show:focus::after {
     opacity: 1;
   }
+  

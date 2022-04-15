@@ -6,25 +6,40 @@
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1 class="neon">Import CSV as file :</h1>
-    <input type="file" id="select-file" class="neon-input-file">
-    <label for="select-file" class="neon-input-file-show">Select a file</label>
-    <span>
-      <strong class="neon-sub">Chosen file:</strong>
-      <span class="neon-sub" id="file-name">None</span>
-    </span>
-    <h1 class="neon">Import CSV as link :</h1>
-    <input class="neon-input">
-    <table>
-        <th>
-            <td>
-                <a href="/" class="neon-button">Return</a>
-            </td>
-            <td>
-                <a href="/Import_CSV" class="neon-button">Show Graph</a>
-            </td>
-        </th>
-    </table>
+    <form method="POST" action="Show_Graph">
+      <h1 class="neon">Import CSV as file :</h1>
+      <div>
+        <input type="file" id="select-file" class="neon-input-file">
+      </div>
+      <div>
+        <label for="select-file" class="neon-input-file-show">Select a file</label>
+      </div>
+      <div>
+        <span>
+          <strong class="neon-sub">Chosen file:</strong>
+          <span class="neon-sub" id="file-name">None</span>
+        </span>
+      </div>
+      <div>
+        <h1 class="neon">Import CSV as link :</h1>
+      </div>
+      <div>
+        <input name="link" class="neon-input">
+      </div>
+      <div>
+        <table>
+            <th>
+                <td>
+                    <a href="/" class="neon-button">Return</a>
+                </td>
+                <td>
+                    <input id="Show-Graph" class="neon-input-file" type="submit">
+                    <label for="Show-Graph" class="neon-button">Show Graph</label>
+                </td>
+            </th>
+        </table>
+      </div>
+    </form>
     <script src="/static/script.js"></script>
   </body>
 </html>

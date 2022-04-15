@@ -19,7 +19,8 @@ Plan Flask :
 
 """
 
-from flask import Flask, render_template
+from cgitb import text
+from flask import Flask, render_template, request
 import random
 import sqlite3
 import csv
@@ -61,6 +62,12 @@ def Data_Analyser():
 @app.route("/Import_CSV", methods=["GET", "POST"])
 def Import_CSV():
     return render_template("Import_CSV.html")
+
+@app.route("/Show_Graph", methods=["GET", "POST"])
+def Show_Graph():
+    lien = request.form.get("link")
+    print(lien)
+    return render_template("Show_Graph.html")
 
 if __name__ == "__main__":
     app.run()
