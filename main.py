@@ -41,6 +41,9 @@ def getCsvFile(url):
             csv_links.append(link.get('href'))
     return csv_links
 
+# def getFile(url):
+#     """get all url which contain word download or datasets"""
+
 def analyseCsv(csv_file):
     """analyse a csv file"""
     df = pandas.read_csv(csv_file)
