@@ -22,7 +22,7 @@ def sortList(lst):
             print(compteur)
             urlStr=compteur.split('/')
             for word in urlStr:
-                if 'datasets' in word or 'download' in word or 'dataset' in word:
+                if 'https://www.data.gouv.fr/fr/datasets/' in word or 'download' in word or 'dataset' in word:
                     newLst.append(compteur)
     return newLst
 
