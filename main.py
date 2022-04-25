@@ -242,12 +242,13 @@ def Selection():
 
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
-    Name = fichier1.getFileName()
-    Table = request.form.get("tab")
+    Table = fichier1.getFileName()
+    Name = request.form.get("tab")
     conn = sqlite3.connect("files\\Database.db", check_same_thread=False)
     cur = conn.cursor()
-    query = "SELECT ? FROM ?"
-    data = cur.execute(query, (Table, Name))
+    query = "SELECT {} FROM '{}'".format(Name, Table)
+    data = cur.execute(query).fetchall()
+    print(data)
     cur.close()
     conn.commit()
     return render_template("Show_Graph.html", data=data)
