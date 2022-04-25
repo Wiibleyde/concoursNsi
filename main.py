@@ -18,11 +18,7 @@ Plan Flaskb (Victor) :
 
 """
 
-from cgitb import text
-from time import process_time_ns
-from turtle import down
-from flask import Flask, render_template, request
-import random
+from flask import Flask, render_template, request, g
 import sqlite3
 import csv
 import requests
@@ -214,6 +210,18 @@ def isCsv(file):
 #     except UnicodeDecodeError:
 #         return False
           
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect("Database.db")
+        db.row_factory = sqlite3.Row
+    return db
+
+def query_db(query, args=(), one=False):
+    cur = get_db().execute(query, args)
+    rv = cur.fetchall()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
 
 @app.route("/", methods=["GET", "POST"])
 def Data_Analyser():
@@ -232,5 +240,10 @@ def Show_Graph():
         download(lien)
     return render_template("Show_Graph.html")
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    fichier1=File("files\\file0.csv")
+    lstFichier1=fichier1.copyToSQLite("files\\Database.db")
+    app.run()
+
+
