@@ -6,7 +6,10 @@
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-      <p class="neon">{{data}}</p>
-    <a href="/" class="neon-button">home</a>
+    <form method="POST" action="Show_Graph">
+      {% for i in Titles %}
+      <input class="neon-button" name="tab" type="submit" value="{{i}}">
+      {% endfor %}
+    </form>
   </body>
 </html>

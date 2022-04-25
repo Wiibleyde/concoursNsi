@@ -164,6 +164,22 @@ class File:
             col.writerow([cell.value for cell in r])
         df = pd.DataFrame(pd.read_csv(f'files\\{name}.csv'))
         return df
+    
+    def getTitle(self,dbName):
+        con = sqlite3.connect(dbName)
+        cur = con.cursor()
+        con.set_trace_callback(print)
+        req="SELECT name FROM pragma_table_info('{}') ORDER BY cid".format(self.getFileName())
+        lstTitle=cur.execute(req).fetchall()
+        con.commit()
+        Temp = []
+        Title = []
+        for i in lstTitle :
+            Temp.append(str(i))
+        for x in Temp :
+            ele = x.split("'")
+            Title.append(ele[1])
+        return Title
 
 
 def download(lst): 
@@ -209,19 +225,6 @@ def isCsv(file):
 #                 return False
 #     except UnicodeDecodeError:
 #         return False
-          
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect("Database.db")
-        db.row_factory = sqlite3.Row
-    return db
-
-def query_db(query, args=(), one=False):
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
 
 @app.route("/", methods=["GET", "POST"])
 def Data_Analyser():
@@ -231,19 +234,28 @@ def Data_Analyser():
 def Import_CSV():
     return render_template("Import_CSV.html")
 
+@app.route("/Selection", methods=["GET", "POST"])
+def Selection():
+    lien = request.form.get("link")
+    Titles = fichier1.getTitle("files\\Database.db")
+    return render_template("Selection.html", Titles = Titles)
+
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
-    lien = request.form.get("link")
-    if lien == "":
-        print('empty')
-    else:
-        download(lien)
-    return render_template("Show_Graph.html")
-
+    Name = fichier1.getFileName()
+    Table = request.form.get("tab")
+    conn = sqlite3.connect("files\\Database.db", check_same_thread=False)
+    cur = conn.cursor()
+    query = "SELECT ? FROM ?"
+    data = cur.execute(query, (Table, Name))
+    cur.close()
+    conn.commit()
+    return render_template("Show_Graph.html", data=data)
 
 if __name__ == "__main__":
-    fichier1=File("files\\file0.csv")
-    lstFichier1=fichier1.copyToSQLite("files\\Database.db")
+    fichier1=File("files\\46TP-TA_Presidentielle_2022__1er au 16 janvier 2022_v5.csv")
+    #lstFichier1=fichier1.copyToSQLite("files\\Database.db")
+    machin = fichier1.getTitle("files\\Database.db")
     app.run()
 
 
