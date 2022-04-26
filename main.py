@@ -33,43 +33,6 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "MotDePasse"
 
-# def getCsvFile(url):
-#     """get all csv file of a html page"""
-#     page = requests.get(url)
-#     soup = BeautifulSoup(page.content, 'html.parser')
-#     csv_links = []
-#     for link in soup.find_all('a'):
-#         if link.get('href').endswith('.csv'):
-#             csv_links.append(link.get('href'))
-#     return csv_links
-
-# def analyseCsv(csv_file):
-#     """analyse a csv file"""
-#     df = pandas.read_csv(csv_file)
-#     return df
-
-# def getLink(url):
-#     """get all csv file of a html page"""
-#     page = requests.get(url)
-#     soup = BeautifulSoup(page.text, 'html.parser')
-#     dlLink = []
-#     for link in soup.find_all('a'):
-#         dlLink.append(link.get('href'))
-#     return dlLink
-
-# def sortList(lst):
-#     newLst = []
-#     for compteur in lst:
-#         if compteur == None:
-#             pass
-#         else:
-#             urlStr=[]
-#             urlStr=compteur.split('/')
-#             for word in urlStr:
-#                 if 'https://www.data.gouv.fr/fr/datasets/' in word or 'download' in word or 'dataset' in word:
-#                     newLst.append(compteur)
-    # return newLst
-
 class File:
     def __init__(self, fileName):
         self.fileName = fileName
@@ -163,7 +126,7 @@ class File:
             col.writerow([cell.value for cell in r])
         df = pd.DataFrame(pd.read_csv(f'files\\{name}.csv'))
         return df
-    
+
     def getTitle(self,dbName):
         con = sqlite3.connect(dbName)
         cur = con.cursor()
@@ -171,14 +134,7 @@ class File:
         req="SELECT name FROM pragma_table_info('{}') ORDER BY cid".format(self.getFileName())
         lstTitle=cur.execute(req).fetchall()
         con.commit()
-        Temp = []
-        Title = []
-        for i in lstTitle :
-            Temp.append(str(i))
-        for x in Temp :
-            ele = x.split("'")
-            Title.append(ele[1])
-        return Title
+        return lstTitle
 
 
 def download(lst): 
@@ -212,18 +168,6 @@ def isCsv(file):
                 return False
     except UnicodeDecodeError:
         return False
-
-# def isJson(file):
-#     """check if a file is a json file by reading its first line"""
-#     try:
-#         with open(f'temp\\{file}', 'r') as f:
-#             first_line = f.readline()
-#             if '{' in first_line:
-#                 return True
-#             else:
-#                 return False
-#     except UnicodeDecodeError:
-#         return False
 
 @app.route("/", methods=["GET", "POST"])
 def Data_Analyser():
