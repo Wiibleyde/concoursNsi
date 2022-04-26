@@ -70,7 +70,6 @@ app.config["SECRET_KEY"] = "MotDePasse"
 #                     newLst.append(compteur)
     # return newLst
 
-
 class File:
     def __init__(self, fileName):
         self.fileName = fileName
