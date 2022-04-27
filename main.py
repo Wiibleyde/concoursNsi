@@ -131,6 +131,12 @@ class File:
             con.commit()
         else:
             print("This file is not a csv file")
+        self.deleteFile()
+
+    def deleteFile(self):
+        """delete a file"""
+        os.remove(self.fileName)
+        print(f'{self.fileName} deleted')
 
     def convertToCSV(self):
         excel = openpyxl.load_workbook(self.fileName)
@@ -164,7 +170,10 @@ def Import_CSV():
 
 @app.route("/Selection", methods=["GET", "POST"])
 def Selection():
+    global fichier1
     lien = request.form.get("link")
+    fichier1=File(lien)
+    fichier1.copyToSQLite("files\\Database.db")
     Titles = fichier1.getTitle("files\\Database.db")
     print(Titles)
     return render_template("Selection.html", Titles = Titles)
@@ -183,7 +192,8 @@ def Show_Graph():
     return render_template("Show_Graph.html", data=data)
 
 if __name__ == "__main__":
-    fichier1=File("https://www.observatoires-des-loyers.org/datagouv/2021/Base_OP_2021_Nationale.csv")
-    lstFichier1=fichier1.copyToSQLite("files\\Database.db")
-    machin = fichier1.getTitle("files\\Database.db")
+    # fichier1=File("https://www.data.gouv.fr/fr/datasets/r/422b3274-114d-4abe-850c-dfc0c69b981f")
+    # lstFichier1=fichier1.copyToSQLite("files\\Database.db")
+    # machin = fichier1.getTitle("files\\Database.db")
     app.run()
+    # fichier1.deleteFile()
