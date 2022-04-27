@@ -12,6 +12,11 @@ app.config["SECRET_KEY"] = "MotDePasse"
 
 class File:
     def __init__(self, fileName):
+        """Init of File class
+
+        Args:
+            fileName (str): Name of the file
+        """
         self.fileName = fileName
         if 'http' in fileName:
             self.fileName=self.download(fileName)
@@ -19,7 +24,14 @@ class File:
                 print("This file is not a csv file")
                 
     def isCsv(self,fileName=None):
-        """check if a file is a csv file by reading its first line"""
+        """Test if a file is a csv file
+
+        Args:
+            fileName (str, optional): name of the file. Defaults to None.
+
+        Returns:
+            bool: true if the file is a csv
+        """
         if fileName is None:
             fileName=self.fileName
         try:
@@ -34,6 +46,14 @@ class File:
             return False
 
     def isXlsx(self, fileName=None):
+        """Test if a file is a xlsx file
+
+        Args:
+            fileName (str, optional): name of the file. Defaults to None.
+
+        Returns:
+            bool: true if the file is a xlsx
+        """
         if fileName is None:
             fileName=self.fileName
         try:
@@ -43,24 +63,28 @@ class File:
             return False
 
     def download(self,url): 
-        """download file"""     
+        """Download file
+        
+        Args:
+            url (str): url of a file
+        """  
         try:
             print(f'Downloading {url}')
             name = self.getFileName()
             r = requests.get(url, allow_redirects=True)
-            open(f'temp\\{name}', 'wb').write(r.content)
-            if self.isCsv(f'temp\\{name}'):
+            open(f'filesTemp\\{name}', 'wb').write(r.content)
+            if self.isCsv(f'filesTemp\\{name}'):
                 newName=f'files\\{name}.csv'
-                os.rename(f'temp\\{name}', newName)
+                os.rename(f'filesTemp\\{name}', newName)
                 print(f'{newName} is csv saving it')
                 return newName
-            elif self.isXlsx(f'temp\\{name}'):
+            elif self.isXlsx(f'filesTemp\\{name}'):
                 newName=f'files\\{name}.xlsx'
-                os.rename(f'temp\\{name}', newName)
+                os.rename(f'filesTemp\\{name}', newName)
                 print(f'{newName} is xlsx saving it')
                 return newName
             else:
-                os.remove(f'temp\\{name}')
+                os.remove(f'filesTemp\\{name}')
                 print(f'{name} is not csv or xlsx deleting it')
                 return False
         except requests.exceptions.MissingSchema:
@@ -69,6 +93,11 @@ class File:
         return f'files\\{self.getFileName()}.xlsx'
 
     def getFileName(self):
+        """get the name of a file
+
+        Returns:
+            str: name of the file
+        """
         if 'http' in self.fileName:
             print('http found')
             return self.fileName.split('/')[-1].split('.')[0]
@@ -76,7 +105,11 @@ class File:
             return self.fileName.split('\\')[-1].split('.')[0]
 
     def fieldNames(self):
-        """returns the field names of a csv or xlsx file"""
+        """name of field in csv file
+
+        Returns:
+            lst: list of fields of the csv file
+        """
         if self.isCsv():
             with open(self.fileName, 'r') as f:
                 reader = csv.reader(f, delimiter=';')
@@ -103,7 +136,11 @@ class File:
             print("This file is not a csv file")
 
     def copyToSQLite(self,dbName):
-        """read a csv file and write it to a sqlite database"""
+        """copying the content of csv file in a sqlite database
+
+        Args:
+            dbName (str): name of database (default name: Database.db)
+        """
         if self.isCsv():
             with open(self.fileName, 'r') as f:
                 reader = csv.reader(f, delimiter=';')
@@ -134,21 +171,20 @@ class File:
         self.deleteFile()
 
     def deleteFile(self):
-        """delete a file"""
+        """deleting specific file
+        """
         os.remove(self.fileName)
         print(f'{self.fileName} deleted')
 
-    def convertToCSV(self):
-        excel = openpyxl.load_workbook(self.fileName)
-        sheet = excel.active
-        name=self.getFileName()
-        col = csv.writer(open(f'files\\{name}.csv','w',newline="",encoding="utf-8"))
-        for r in sheet.rows:
-            col.writerow([cell.value for cell in r])
-        df = pd.DataFrame(pd.read_csv(f'files\\{name}.csv'))
-        return df
-
     def getTitle(self,dbName):
+        """get the title of the sqlite db
+
+        Args:
+            dbName (str): name of database
+
+        Returns:
+            lst: list of titles of sqlite database
+        """
         con = sqlite3.connect(dbName)
         cur = con.cursor()
         # con.set_trace_callback(print)
@@ -160,16 +196,25 @@ class File:
             titles.append(ele[0])
         return titles
 
+def deleteDatabase():
+    """delete the database named 'Database.db'
+    """
+    os.remove('files\\Database.db')
+    print('Database deleted')
+
 @app.route("/", methods=["GET", "POST"])
 def Data_Analyser():
+    """main page"""
     return render_template("Data_Analyser.html")
 
 @app.route("/Import_CSV", methods=["GET", "POST"])
 def Import_CSV():
+    """import a csv file"""
     return render_template("Import_CSV.html")
 
 @app.route("/Selection", methods=["GET", "POST"])
 def Selection():
+    """select a title of csv file"""
     global fichier1
     lien = request.form.get("link")
     fichier1=File(lien)
@@ -180,6 +225,7 @@ def Selection():
 
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
+    """show a graph"""
     Table = fichier1.getFileName()
     Name = request.form.get("tab")
     conn = sqlite3.connect("files\\Database.db", check_same_thread=False)
@@ -196,4 +242,4 @@ if __name__ == "__main__":
     # lstFichier1=fichier1.copyToSQLite("files\\Database.db")
     # machin = fichier1.getTitle("files\\Database.db")
     app.run()
-    # fichier1.deleteFile()
+    deleteDatabase()
