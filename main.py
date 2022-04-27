@@ -238,8 +238,5 @@ def Show_Graph():
     return render_template("Show_Graph.html", data=data)
 
 if __name__ == "__main__":
-    # fichier1=File("https://www.data.gouv.fr/fr/datasets/r/422b3274-114d-4abe-850c-dfc0c69b981f")
-    # lstFichier1=fichier1.copyToSQLite("files\\Database.db")
-    # machin = fichier1.getTitle("files\\Database.db")
     app.run()
     deleteDatabase()
