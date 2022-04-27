@@ -239,4 +239,7 @@ def Show_Graph():
 
 if __name__ == "__main__":
     app.run()
-    deleteDatabase()
+    try:
+        deleteDatabase()
+    except FileNotFoundError:
+        print("Database not found")
