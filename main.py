@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g
+from flask import Flask, render_template, request, g, redirect
 import sqlite3
 import csv
 import requests
@@ -22,7 +22,7 @@ class File:
             self.fileName=self.download(fileName)
             if not self.fileName:
                 print("This file is not a csv file")
-                
+
     def isCsv(self,fileName=None):
         """Test if a file is a csv file
 
@@ -42,7 +42,7 @@ class File:
                     return True
                 else:
                     return False
-        except UnicodeDecodeError:
+        except UnicodeDecodeError or FileNotFoundError:
             return False
 
     def isXlsx(self, fileName=None):
@@ -59,7 +59,7 @@ class File:
         try:
             excel=openpyxl.load_workbook(fileName)
             return True
-        except openpyxl.utils.exceptions.InvalidFileException:
+        except openpyxl.utils.exceptions.InvalidFileException or FileNotFoundError:
             return False
 
     def download(self,url): 
@@ -72,21 +72,24 @@ class File:
             print(f'Downloading {url}')
             name = self.getFileName()
             r = requests.get(url, allow_redirects=True)
-            open(f'filesTemp\\{name}', 'wb').write(r.content)
-            if self.isCsv(f'filesTemp\\{name}'):
-                newName=f'files\\{name}.csv'
-                os.rename(f'filesTemp\\{name}', newName)
-                print(f'{newName} is csv saving it')
-                return newName
-            elif self.isXlsx(f'filesTemp\\{name}'):
-                newName=f'files\\{name}.xlsx'
-                os.rename(f'filesTemp\\{name}', newName)
-                print(f'{newName} is xlsx saving it')
-                return newName
-            else:
-                os.remove(f'filesTemp\\{name}')
-                print(f'{name} is not csv or xlsx deleting it')
+            try:
+                open(f'filesTemp\\{name}', 'wb').write(r.content)
+                if self.isCsv(f'filesTemp\\{name}'):
+                    newName=f'files\\{name}.csv'
+                    os.rename(f'filesTemp\\{name}', newName)
+                    print(f'{newName} is csv saving it')
+                    return newName
+                elif self.isXlsx(f'filesTemp\\{name}'):
+                    newName=f'files\\{name}.xlsx'
+                    os.rename(f'filesTemp\\{name}', newName)
+                    print(f'{newName} is xlsx saving it')
+                    return newName
+                else:
+                    os.remove(f'filesTemp\\{name}')
+                    print(f'{name} is not csv or xlsx deleting it')
                 return False
+            except FileNotFoundError:
+                return Error_Page("File not found")
         except requests.exceptions.MissingSchema:
             print(f'{url} is not a valid url')
 
@@ -195,7 +198,7 @@ class File:
         for ele in lstTitle:
             titles.append(ele[0])
         return titles
-
+    
 def deleteDatabase():
     """delete the database named 'Database.db'
     """
@@ -216,11 +219,35 @@ def Import_CSV():
 def Selection():
     """select a title of csv file"""
     global fichier1
-    lien = request.form.get("link")
-    fichier1=File(lien)
-    fichier1.copyToSQLite("files\\Database.db")
-    Titles = fichier1.getTitle("files\\Database.db")
-    print(Titles)
+
+    if len(request.form)==0:
+        if fichier1 is None:
+            print('redirect')
+            return redirect('/Import_CSV')
+        else:
+            Titles = fichier1.getTitle("files\\Database.db")
+    else:
+        if request.form.get("link") != '':
+            lien = request.form.get("link")
+            try:
+                fichier1=File(lien)
+            except FileNotFoundError:
+                return Error_Page("File not found")
+            fichier1.copyToSQLite("files\\Database.db")
+            Titles = fichier1.getTitle("files\\Database.db")
+        elif len(request.files)!=0:
+            f = request.files['select-file']
+            f.save(f'files\\{f.filename}')
+            fichier1=File(f'files\\{f.filename}')
+            fichier1.copyToSQLite(f'files\\Database.db')
+            Titles = fichier1.getTitle("files\\Database.db")
+        else:
+            try:
+                Titles = fichier1.getTitle("files\\Database.db")
+            except NameError:
+                print('redirect')
+                return redirect('/Import_CSV')
+
     return render_template("Selection.html", Titles = Titles)
 
 @app.route("/Show_Graph", methods=["GET", "POST"])
@@ -236,6 +263,11 @@ def Show_Graph():
     cur.close()
     conn.commit()
     return render_template("Show_Graph.html", data=data)
+
+@app.route("/Error_Page", methods=["GET", "POST"])
+def Error_Page(error):
+    """error page"""
+    return render_template("Error_Page.html", error=error)
 
 if __name__ == "__main__":
     app.run()
