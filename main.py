@@ -1,3 +1,9 @@
+"""TODO 
+- fix the file adding function
+- get the right datas
+- generate charts
+"""
+
 from flask import Flask, render_template, request, g, redirect
 import sqlite3
 import csv
