@@ -205,6 +205,33 @@ class File:
             titles.append(ele[0])
         return titles
     
+    def getData(self,column):
+        """get the data of one column of the sqlite db"""
+        con = sqlite3.connect("files\\Database.db")
+        cur = con.cursor()
+        # con.set_trace_callback(print)
+        req="SELECT {} FROM '{}'".format(column,self.getFileName())
+        data=cur.execute(req).fetchall()
+        con.commit()
+        lstData=[]
+        for ele in data:
+            lstData.append(ele[0])
+        return lstData
+    
+    def getOccurence(self,column):
+        """get occurence of all data in a list
+        return a tuple 
+        format : {label:'title', value:occurence}"""
+        lstData=self.getData(column)
+        lstOccurence=[]
+        for ele in lstData:
+            if ele not in lstOccurence:
+                lstOccurence.append(ele)
+        lstOccurence.sort()
+        lstOccurence.reverse()
+        lstOccurence=[{'label':ele,'value':lstData.count(ele)} for ele in lstOccurence]
+        return lstOccurence
+
 def deleteDatabase():
     """delete the database named 'Database.db'
     """
@@ -261,13 +288,8 @@ def Show_Graph():
     """show a graph"""
     Table = fichier1.getFileName()
     Name = request.form.get("tab")
-    conn = sqlite3.connect("files\\Database.db", check_same_thread=False)
-    cur = conn.cursor()
-    query = "SELECT {} FROM '{}'".format(Name, Table)
-    data = cur.execute(query).fetchone()
-    print(data)
-    cur.close()
-    conn.commit()
+    data = fichier1.getData(Name)
+    print(fichier1.getOccurence(Name))
     return render_template("Show_Graph.html", data=data)
 
 @app.route("/Error_Page", methods=["GET", "POST"])
@@ -276,6 +298,9 @@ def Error_Page(error):
     return render_template("Error_Page.html", error=error)
 
 if __name__ == "__main__":
+    # fichier1=File('')
+    # fichier1.copyToSQLite("files\\Database.db")
+    # fichier1.getData("Nom")    
     app.run()
     try:
         deleteDatabase()

@@ -6,10 +6,23 @@
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <form method="POST" action="Show_Graph">
-      {% for i in Titles %}
-      <input class="neon-button" name="tab" type="submit" value="{{i}}">
-      {% endfor %}
-    </form>
+    <div class="chartSelection">
+      <h1>Select a type of chart :</h1>
+      <form method="POST" action="Selection">
+        <input class="neon-button" name="tab" type="submit" value="Area chart">
+        <input class="neon-button" name="tab" type="submit" value="Line chart">
+        <input class="neon-button" name="tab" type="submit" value="Bar chart">
+        <input class="neon-button" name="tab" type="submit" value="Bar stacked chart">
+        <input class="neon-button" name="tab" type="submit" value="Pie chart">
+      </form>
+    </div>
+    <div class="titlesButton">
+      <h1>Select title :</h1>
+      <form method="POST" action="Show_Graph">
+        {% for i in Titles %}
+        <input class="neon-button" name="tab" type="submit" value="{{i}}">
+        {% endfor %}
+      </form>
+    </div>
   </body>
 </html>
