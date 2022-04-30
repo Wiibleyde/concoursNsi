@@ -273,6 +273,17 @@ class File:
             lstData[column]=int(data[column])
         return lstData
 
+    def getColumnDistinct(self,column):
+        con=sqlite3.connect("files\\Database.db")
+        cur = con.cursor()
+        # con.set_trace_callback(print)
+        req='SELECT DISTINCT "{}" FROM "{}"'.format(column,self.getFileName())
+        data=cur.execute(req).fetchall()
+        lstData=[]
+        for ele in data:
+            lstData.append(ele[0])
+        return lstData
+
 def deleteDatabase():
     """delete the database named 'Database.db'
     """
@@ -331,7 +342,8 @@ def Show_Graph():
     Name = request.form.get("tab")
     data = fichier1.getData(Name)
     # print(fichier1.getOccurence(Name))
-    print(fichier1.getPieDataSum([['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons'],'0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
+    # print(fichier1.getPieDataSum([['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons'],'0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
+    print(fichier1.getColumnDistinct(Name))
     return render_template("Show_Graph.html", data=data) 
 
 @app.route("/Error_Page", methods=["GET", "POST"])
