@@ -233,24 +233,43 @@ class File:
         return lstOccurence
 
     def getPieDataSum(self,columns,filter=None):
+        """return a dict with column and value of pie chart
+
+        Args:
+            columns (lst): list of columns| each element can be a string or a list of string
+            filter (dict, optional): dict of filter to apply to DBase. Defaults to None.
+
+        Returns:
+            dict: dict of column and value of pie chart
+        """
         con = sqlite3.connect("files\\Database.db")
         con.row_factory = sqlite3.Row
         cur = con.cursor()
         # con.set_trace_callback(print)
         sum=''
+        rcolumns=[]
         for column in columns:
-            sum+='SUM("{}") AS "{}",'.format(column,column)
+            if isinstance(column,str):
+                sum+='SUM("{}") AS "{}",'.format(column,column)
+                rcolumns.append(column)
+            else:
+                s=''
+                for c in column:
+                    s+='SUM("{}")+'.format(c)
+                u=column[0].rindex('_')
+                sum+='{} AS "{}",'.format(s[:-1],column[0][:u])
+                rcolumns.append(column[0][:u])
         req='SELECT {} FROM "{}"'.format(sum[:-1],self.getFileName())
         if filter is not None:
             where=''
             for k in filter.keys():
                 where+='"{}"="{}" AND '.format(k,filter[k])
-            req+='WHERE {}'.format(where[:-4])
+            req+=' WHERE {}'.format(where[:-4])
         print(req)
         data=cur.execute(req).fetchone()
         # con.commit()
         lstData={}
-        for column in columns:
+        for column in rcolumns:
             lstData[column]=int(data[column])
         return lstData
 
@@ -311,8 +330,8 @@ def Show_Graph():
     Table = fichier1.getFileName()
     Name = request.form.get("tab")
     data = fichier1.getData(Name)
-    print(fichier1.getOccurence(Name))
-    print(fichier1.getPieDataSum(['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons','0241_litterature_et_lca_latin_filles','0241_litterature_et_lca_latin_garcons','0242_litterature_et_lca_grec_filles','0242_litterature_et_lca_grec_garcons','0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons','0439_hist_geo_geopolitique_sc_politiques_filles','0439_hist_geo_geopolitique_sc_politiques_garcons','0507_sciences_economiques_et_sociales_filles','0507_sciences_economiques_et_sociales_garcons','0613_mathematiques_filles','0613_mathematiques_garcons','0623_physique_chimie_filles','0623_physique_chimie_garcons','0629_sciences_de_la_vie_et_de_la_terre_filles','0629_sciences_de_la_vie_et_de_la_terre_garcons','0747_numerique_et_sciences_informatiques_filles'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
+    # print(fichier1.getOccurence(Name))
+    print(fichier1.getPieDataSum([['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons'],'0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
     return render_template("Show_Graph.html", data=data) 
 
 @app.route("/Error_Page", methods=["GET", "POST"])
