@@ -33,10 +33,11 @@ Morris.Bar(config);
 config.element = 'stacked';
 config.stacked = true;
 Morris.Bar(config);
+
 Morris.Donut({
   element: 'pie-chart',
   data: [
-    {'label': 'Maison', 'value': 746}, 
+  {'label': 'Maison', 'value': 746}, 
 	{'label': 'Appartement', 'value': 1132}, 
 	{'label': '', 'value': 1381}
   ]

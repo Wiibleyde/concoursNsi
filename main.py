@@ -232,6 +232,28 @@ class File:
         lstOccurence=[{'label':ele,'value':lstData.count(ele)} for ele in lstOccurence]
         return lstOccurence
 
+    def getPieDataSum(self,columns,filter=None):
+        con = sqlite3.connect("files\\Database.db")
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        # con.set_trace_callback(print)
+        sum=''
+        for column in columns:
+            sum+='SUM("{}") AS "{}",'.format(column,column)
+        req='SELECT {} FROM "{}"'.format(sum[:-1],self.getFileName())
+        if filter is not None:
+            where=''
+            for k in filter.keys():
+                where+='"{}"="{}" AND '.format(k,filter[k])
+            req+='WHERE {}'.format(where[:-4])
+        print(req)
+        data=cur.execute(req).fetchone()
+        # con.commit()
+        lstData={}
+        for column in columns:
+            lstData[column]=int(data[column])
+        return lstData
+
 def deleteDatabase():
     """delete the database named 'Database.db'
     """
@@ -290,7 +312,8 @@ def Show_Graph():
     Name = request.form.get("tab")
     data = fichier1.getData(Name)
     print(fichier1.getOccurence(Name))
-    return render_template("Show_Graph.html", data=data)
+    print(fichier1.getPieDataSum(['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons','0241_litterature_et_lca_latin_filles','0241_litterature_et_lca_latin_garcons','0242_litterature_et_lca_grec_filles','0242_litterature_et_lca_grec_garcons','0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons','0439_hist_geo_geopolitique_sc_politiques_filles','0439_hist_geo_geopolitique_sc_politiques_garcons','0507_sciences_economiques_et_sociales_filles','0507_sciences_economiques_et_sociales_garcons','0613_mathematiques_filles','0613_mathematiques_garcons','0623_physique_chimie_filles','0623_physique_chimie_garcons','0629_sciences_de_la_vie_et_de_la_terre_filles','0629_sciences_de_la_vie_et_de_la_terre_garcons','0747_numerique_et_sciences_informatiques_filles'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
+    return render_template("Show_Graph.html", data=data) 
 
 @app.route("/Error_Page", methods=["GET", "POST"])
 def Error_Page(error):
