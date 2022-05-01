@@ -7,30 +7,28 @@
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div class="chartSelection">
-      <h1 class="neon" >Columns</h1>
-      <form method="POST" action="Show_Graph">
-        {% for x in Columns %}
-        <div>
-          <input class="neon-button" name="column" type="submit" value="{{x}}">
-        </div>
-        {% endfor %}
-      </form>
-    </div>
-    <div class="titlesButton">
-      <h1 class="neon">Filters</h1>
+    <h1 class="neon">Filters</h1>
       <form method="POST" action="Show_Graph">
         {% for i in range (0,filtersLen) %}
         <div id="{{Filters[i]}}">
           <label for="{{Filters[i]}}">{{Filters[i]}}: </label>
-          <select name="{{Filters[i]}}" id="{{Filters[i]}}">
+          <select name="Select_{{Filters[i]}}" id="{{Filters[i]}}">
             <option value="">--</option>
             {% for x in FiltersValues[i] %}
-            <option value="{{x}}">{{x}}</option>
+            <option>{{x}}</option>
             {% endfor %}
           </select>
         </div>
         {% endfor %}
+      <div class="chartSelection">
+      <h1 class="neon" >Columns</h1>
+        {% for x in Columns %}
+        <div>
+          <input class="neon-button" name="Column_{{x}}" id="Column_{{x}}" type="checkbox" value="{{x}}">
+          <label for="Column_{{x}}">{{x}}</label>
+        </div>
+        {% endfor %}
+        <input class="neon-button" type="submit" value="select">
       </form>
     </div>
   </body>

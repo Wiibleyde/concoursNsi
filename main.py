@@ -210,7 +210,7 @@ class File:
         con = sqlite3.connect("files\\Database.db")
         cur = con.cursor()
         # con.set_trace_callback(print)
-        req="SELECT {} FROM '{}'".format(column,self.getFileName())
+        req='SELECT "{}" FROM "{}"'.format(column,self.getFileName())
         data=cur.execute(req).fetchall()
         con.commit()
         lstData=[]
@@ -367,15 +367,23 @@ def Selection():
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
     """show a graph"""
-    Table = fichier.getFileName()
-    Filter = request.form.get("filter")
-    Column = request.form.get("column")
-    # data = fichier.getData(Name)
+    Filter = {}
+    Column = []
+    # Titles = fichier.getTitle("files\\Database.db")
+    # for i in range(9):
+    #     Filters.append(Titles[i])
+    # for i in range(len(Filters)):
+    #     Filter[Titles[i]]=request.form.get(Filters[i])
+    for i in request.form :
+        if i[:7] == "Select_" and request.form.get(i) != "":
+            Filter[i[7:]] = request.form.get(i)
+        elif i[:7] == "Column_":
+            Column.append(request.form.get(i))
     # print(fichier.getOccurence(Name))
-    # print(fichier.getPieDataSum([['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons'],'0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
+    resultat = fichier.getPieDataSum(Column, Filter)
     # print(fichier.getColumnDistinct(Name))
     # print(fichier.isColumnNumeric(Name))
-    return render_template("Show_Graph.html", data=data) 
+    return render_template("Show_Graph.html", resultat = resultat) 
 
 @app.route("/Error_Page", methods=["GET", "POST"])
 def Error_Page(error):
