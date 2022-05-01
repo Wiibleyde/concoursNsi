@@ -296,6 +296,8 @@ class File:
             if ele!='' and not ele.isdecimal():
                 return False
         return True
+        
+        
 
 def deleteDatabase():
     """delete the database named 'Database.db'
@@ -350,7 +352,16 @@ def Selection():
         Filters.append(Titles[i])
     for i in range(9, len(Titles)):
         Columns.append(Titles[i])
-    return render_template("Selection.html", Filters = Filters, Columns = Columns)
+    filter1 = fichier.getColumnDistinct(Titles[0])
+    filter2 = fichier.getColumnDistinct(Titles[1])
+    filter3 = fichier.getColumnDistinct(Titles[2])
+    filter4 = fichier.getColumnDistinct(Titles[3])
+    filter5 = fichier.getColumnDistinct(Titles[4])
+    filter6 = fichier.getColumnDistinct(Titles[5])
+    filter7 = fichier.getColumnDistinct(Titles[6])
+    filter8 = fichier.getColumnDistinct(Titles[7])
+    filter9 = fichier.getColumnDistinct(Titles[8])
+    return render_template("Selection.html", Filters = Filters, Columns = Columns, filter1 = filter1, filter2 = filter2, filter3 = filter3, filter4 = filter4, filter5 = filter5, filter6 = filter6, filter7 = filter7, filter8 = filter8, filter9 = filter9)
 
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
