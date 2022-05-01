@@ -296,8 +296,6 @@ class File:
                 return False
         return True
         
-        
-
 def deleteDatabase():
     """delete the database named 'Database.db'
     """
@@ -381,6 +379,10 @@ def Show_Graph():
             Column.append(request.form.get(i))
     # print(fichier.getOccurence(Name))
     resultat = fichier.getPieDataSum(Column, Filter)
+    # strResultat='data: ['
+    # for i in resultat:
+    #     strResultat+="{'label':'"+i+"','value':"+str(resultat[i])+"},"
+    # strResultat=strResultat[:-1]+']'
     # print(fichier.getColumnDistinct(Name))
     # print(fichier.isColumnNumeric(Name))
     return render_template("Show_Graph.html", resultat = resultat) 
