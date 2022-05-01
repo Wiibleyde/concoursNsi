@@ -11,6 +11,7 @@ import requests
 import os
 import pandas as pd
 import openpyxl
+from sqlalchemy import Column
 
 app = Flask(__name__)
 
@@ -218,19 +219,19 @@ class File:
             lstData.append(ele[0])
         return lstData
     
-    def getOccurence(self,column):
-        """get occurence of all data in a list
-        return a tuple 
-        format : {label:'title', value:occurence}"""
-        lstData=self.getData(column)
-        lstOccurence=[]
-        for ele in lstData:
-            if ele not in lstOccurence:
-                lstOccurence.append(ele)
-        lstOccurence.sort()
-        lstOccurence.reverse()
-        lstOccurence=[{'label':ele,'value':lstData.count(ele)} for ele in lstOccurence]
-        return lstOccurence
+    # def getOccurence(self,column):
+    #     """get occurence of all data in a list
+    #     return a tuple 
+    #     format : {label:'title', value:occurence}"""
+    #     lstData=self.getData(column)
+    #     lstOccurence=[]
+    #     for ele in lstData:
+    #         if ele not in lstOccurence:
+    #             lstOccurence.append(ele)
+    #     lstOccurence.sort()
+    #     lstOccurence.reverse()
+    #     lstOccurence=[{'label':ele,'value':lstData.count(ele)} for ele in lstOccurence]
+    #     return lstOccurence
 
     def getPieDataSum(self,columns,filter=None):
         """return a dict with column and value of pie chart
@@ -315,48 +316,53 @@ def Import_CSV():
 @app.route("/Selection", methods=["GET", "POST"])
 def Selection():
     """select a title of csv file"""
-    global fichier1
-
+    global fichier
+    Filters = []
+    Columns = []
     if len(request.form)==0:
-        if fichier1 is None:
+        if fichier is None:
             print('redirect')
             return redirect('/Import_CSV')
         else:
-            Titles = fichier1.getTitle("files\\Database.db")
+            Titles = fichier.getTitle("files\\Database.db")
     else:
         if request.form.get("link") != '':
             lien = request.form.get("link")
             try:
-                fichier1=File(lien)
+                fichier=File(lien)
             except FileNotFoundError:
                 return Error_Page("File not found")
-            fichier1.copyToSQLite("files\\Database.db")
-            Titles = fichier1.getTitle("files\\Database.db")
+            fichier.copyToSQLite("files\\Database.db")
+            Titles = fichier.getTitle("files\\Database.db")
         elif len(request.files)!=0:
             f = request.files['select-file']
             f.save(f'files\\{f.filename}')
-            fichier1=File(f'files\\{f.filename}')
-            fichier1.copyToSQLite(f'files\\Database.db')
-            Titles = fichier1.getTitle("files\\Database.db")
+            fichier=File(f'files\\{f.filename}')
+            fichier.copyToSQLite(f'files\\Database.db')
+            Titles = fichier.getTitle("files\\Database.db")
         else:
             try:
-                Titles = fichier1.getTitle("files\\Database.db")
+                Titles = fichier.getTitle("files\\Database.db")
             except NameError:
                 print('redirect')
                 return redirect('/Import_CSV')
-
-    return render_template("Selection.html", Titles = Titles)
+    for i in range(9):
+        Filters.append(Titles[i])
+    for i in range(9, len(Titles)):
+        Columns.append(Titles[i])
+    return render_template("Selection.html", Filters = Filters, Columns = Columns)
 
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
     """show a graph"""
-    Table = fichier1.getFileName()
-    Name = request.form.get("tab")
-    data = fichier1.getData(Name)
-    # print(fichier1.getOccurence(Name))
-    # print(fichier1.getPieDataSum([['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons'],'0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
-    print(fichier1.getColumnDistinct(Name))
-    print(fichier1.isColumnNumeric(Name))
+    Table = fichier.getFileName()
+    Filter = request.form.get("filter")
+    Column = request.form.get("column")
+    data = fichier.getData(Name)
+    # print(fichier.getOccurence(Name))
+    # print(fichier.getPieDataSum([['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons'],'0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
+    print(fichier.getColumnDistinct(Name))
+    print(fichier.isColumnNumeric(Name))
     return render_template("Show_Graph.html", data=data) 
 
 @app.route("/Error_Page", methods=["GET", "POST"])
@@ -365,9 +371,9 @@ def Error_Page(error):
     return render_template("Error_Page.html", error=error)
 
 if __name__ == "__main__":
-    # fichier1=File('')
-    # fichier1.copyToSQLite("files\\Database.db")
-    # fichier1.getData("Nom")    
+    # fichier=File('')
+    # fichier.copyToSQLite("files\\Database.db")
+    # fichier.getData("Nom")    
     app.run()
     try:
         deleteDatabase()

@@ -7,20 +7,22 @@
   </head>
   <body>
     <div class="chartSelection">
-      <h1>Select a type of chart :</h1>
-      <form method="POST" action="Selection">
-        <input class="neon-button" name="tab" type="submit" value="Area chart">
-        <input class="neon-button" name="tab" type="submit" value="Line chart">
-        <input class="neon-button" name="tab" type="submit" value="Bar chart">
-        <input class="neon-button" name="tab" type="submit" value="Bar stacked chart">
-        <input class="neon-button" name="tab" type="submit" value="Pie chart">
+      <h1 class="neon" >Columns</h1>
+      <form method="POST" action="Show_Graph">
+        {% for x in Columns %}
+        <div>
+          <input class="neon-button" name="column" type="submit" value="{{x}}">
+        </div>
+        {% endfor %}
       </form>
     </div>
     <div class="titlesButton">
-      <h1>Select title :</h1>
+      <h1 class="neon">Filters</h1>
       <form method="POST" action="Show_Graph">
-        {% for i in Titles %}
-        <input class="neon-button" name="tab" type="submit" value="{{i}}">
+        {% for i in Filters %}
+        <div>
+          <input class="neon-button" name="filter" type="submit" value="{{i}}">
+        </div>
         {% endfor %}
       </form>
     </div>

@@ -172,3 +172,9 @@
     opacity: 1;
   }
   
+.neon-hidden-text{
+  font-size: 2rem;
+  display: none;
+  text-shadow: 0 0 0.125em, 0 0 0.45em currentColor;  
+  position: relative;
+}
