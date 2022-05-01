@@ -236,8 +236,10 @@ class File:
                 u=column[0].rindex('_')
                 sum+='{} AS "{}",'.format(s[:-1],column[0][:u])
                 rcolumns.append(column[0][:u])
+        if sum == '':
+            return None
         req='SELECT {} FROM "{}"'.format(sum[:-1],self.getFileName())
-        if filter is not None:
+        if filter is not None and len(filter)>0:
             where=''
             for k in filter.keys():
                 where+='"{}"="{}" AND '.format(k,filter[k])
@@ -253,7 +255,7 @@ class File:
         """get the distinct value of a column"""
         con=sqlite3.connect("files\\Database.db")
         cur = con.cursor()
-        req='SELECT DISTINCT "{}" FROM "{}"'.format(column,self.getFileName())
+        req='SELECT DISTINCT "{}" FROM "{}" ORDER BY "{}"'.format(column,self.getFileName(),column)
         data=cur.execute(req).fetchall()
         lstData=[]
         for ele in data:
