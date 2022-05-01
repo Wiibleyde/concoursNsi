@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
@@ -9,10 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa&amp;display=swap" rel="stylesheet">
   </head>
   <body>
-    <h1 class="neon">Filters</h1>
+    <h1>Filters</h1>
       <form method="POST" action="Show_Graph">
         {% for i in range (0,filtersLen) %}
-        <div id="{{Filters[i]}}">
+        <div id="{{Filters[i]}}" class="input-selec">
           <label for="{{Filters[i]}}">{{Filters[i]}}: </label>
           <select name="Select_{{Filters[i]}}" id="{{Filters[i]}}">
             <option value="">--</option>
@@ -22,15 +21,15 @@
           </select>
         </div>
         {% endfor %}
-      <div class="chartSelection">
-      <h1 class="neon" >Columns</h1>
+      <div>
+      <h1>Columns</h1>
         {% for x in Columns %}
-        <div>
-          <input class="neon-button" name="Column_{{x}}" id="Column_{{x}}" type="checkbox" value="{{x}}">
+        <div class="input-selec">
+          <input name="Column_{{x}}" id="Column_{{x}}" type="checkbox" value="{{x}}">
           <label for="Column_{{x}}">{{x}}</label>
         </div>
         {% endfor %}
-        <input class="neon-button" type="submit" value="select">
+        <input class="button" type="submit" value="select">
       </form>
     </div>
   </body>

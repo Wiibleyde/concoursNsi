@@ -5,4 +5,62 @@ html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   text-align: center;
+  color: gray;
+}
+
+.button{
+    font-size: 200%;
+    text-decoration: none;
+    color: gray;
+    background: white;
+    padding: 0.25em 1em;
+    border-width: 5px;
+    border-radius: 15px;
+    cursor:pointer;
+    border: 2px solid gray;
+    display: inline-block;
+    margin: 1em;
+}
+
+.button:hover{
+  font-size: 200%;
+  text-decoration: none;
+  color: white;
+  background: gray;
+  padding: 0.25em 1em;
+  border-width: 6px;
+  border-radius: 15px;
+  cursor:pointer;
+  border: 2px solid gray;
+  transition-duration: 0.2s;
+  display: inline-block;
+  margin: 1em;
+}
+
+.hide-input{
+  display: none;
+}
+
+.input{
+  font-size: 200%;
+  text-decoration: none;
+  color: gray;
+  background: white;
+  padding: 0.25em 1em;
+  border-width: 5px;
+  border-radius: 15px;
+  border: 2px solid gray;
+  display: inline-block;
+  margin: 1em;
+}
+
+table{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.input-selec{
+  font-size: 100%;
+  padding: 0.25em 1em;
+  margin: 0.5em;
 }

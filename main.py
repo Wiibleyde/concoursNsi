@@ -1,9 +1,3 @@
-"""TODO 
-- fix the file adding function
-- get the right datas
-- generate charts
-"""
-
 from flask import Flask, render_template, request, g, redirect
 import sqlite3
 import csv
@@ -123,7 +117,7 @@ class File:
             with open(self.fileName, 'r') as f:
                 reader = csv.reader(f, delimiter=';')
                 firstLine=next(reader)
-                cols=firstLine #[0].split(';')
+                cols=firstLine
                 for compteur in range(len(cols)):
                     cols[compteur]="'"+cols[compteur].replace(' ','_')+"'"
                 return cols               
@@ -196,7 +190,6 @@ class File:
         """
         con = sqlite3.connect(dbName)
         cur = con.cursor()
-        # con.set_trace_callback(print)
         req="SELECT name FROM pragma_table_info('{}') ORDER BY cid".format(self.getFileName())
         lstTitle=cur.execute(req).fetchall()
         con.commit()
@@ -209,7 +202,6 @@ class File:
         """get the data of one column of the sqlite db"""
         con = sqlite3.connect("files\\Database.db")
         cur = con.cursor()
-        # con.set_trace_callback(print)
         req='SELECT "{}" FROM "{}"'.format(column,self.getFileName())
         data=cur.execute(req).fetchall()
         con.commit()
@@ -217,20 +209,6 @@ class File:
         for ele in data:
             lstData.append(ele[0])
         return lstData
-    
-    # def getOccurence(self,column):
-    #     """get occurence of all data in a list
-    #     return a tuple 
-    #     format : {label:'title', value:occurence}"""
-    #     lstData=self.getData(column)
-    #     lstOccurence=[]
-    #     for ele in lstData:
-    #         if ele not in lstOccurence:
-    #             lstOccurence.append(ele)
-    #     lstOccurence.sort()
-    #     lstOccurence.reverse()
-    #     lstOccurence=[{'label':ele,'value':lstData.count(ele)} for ele in lstOccurence]
-    #     return lstOccurence
 
     def getPieDataSum(self,columns,filter=None):
         """return a dict with column and value of pie chart
@@ -245,7 +223,6 @@ class File:
         con = sqlite3.connect("files\\Database.db")
         con.row_factory = sqlite3.Row
         cur = con.cursor()
-        # con.set_trace_callback(print)
         sum=''
         rcolumns=[]
         for column in columns:
@@ -267,7 +244,6 @@ class File:
             req+=' WHERE {}'.format(where[:-4])
         print(req)
         data=cur.execute(req).fetchone()
-        # con.commit()
         lstData={}
         for column in rcolumns:
             lstData[column]=int(data[column])
@@ -277,7 +253,6 @@ class File:
         """get the distinct value of a column"""
         con=sqlite3.connect("files\\Database.db")
         cur = con.cursor()
-        # con.set_trace_callback(print)
         req='SELECT DISTINCT "{}" FROM "{}"'.format(column,self.getFileName())
         data=cur.execute(req).fetchall()
         lstData=[]
@@ -289,7 +264,6 @@ class File:
         """check if a column contains only numeric value"""
         con=sqlite3.connect("files\\Database.db")
         cur = con.cursor()
-        # con.set_trace_callback(print)
         lstData=self.getColumnDistinct(column)
         for ele in lstData:
             if ele!='' and not ele.isdecimal():
@@ -351,15 +325,6 @@ def Selection():
         FiltersValues.append(fichier.getColumnDistinct(Titles[i]))
     for i in range(9, len(Titles)):
         Columns.append(Titles[i])
-    # filter1 = fichier.getColumnDistinct(Titles[0])
-    # filter2 = fichier.getColumnDistinct(Titles[1])
-    # filter3 = fichier.getColumnDistinct(Titles[2])
-    # filter4 = fichier.getColumnDistinct(Titles[3])
-    # filter5 = fichier.getColumnDistinct(Titles[4])
-    # filter6 = fichier.getColumnDistinct(Titles[5])
-    # filter7 = fichier.getColumnDistinct(Titles[6])
-    # filter8 = fichier.getColumnDistinct(Titles[7])
-    # filter9 = fichier.getColumnDistinct(Titles[8])
     return render_template("Selection.html", Filters = Filters, Columns = Columns, FiltersValues = FiltersValues, filtersLen=len(Filters))
 
 @app.route("/Show_Graph", methods=["GET", "POST"])
@@ -367,24 +332,12 @@ def Show_Graph():
     """show a graph"""
     Filter = {}
     Column = []
-    # Titles = fichier.getTitle("files\\Database.db")
-    # for i in range(9):
-    #     Filters.append(Titles[i])
-    # for i in range(len(Filters)):
-    #     Filter[Titles[i]]=request.form.get(Filters[i])
     for i in request.form :
         if i[:7] == "Select_" and request.form.get(i) != "":
             Filter[i[7:]] = request.form.get(i)
         elif i[:7] == "Column_":
             Column.append(request.form.get(i))
-    # print(fichier.getOccurence(Name))
     resultat = fichier.getPieDataSum(Column, Filter)
-    # strResultat='data: ['
-    # for i in resultat:
-    #     strResultat+="{'label':'"+i+"','value':"+str(resultat[i])+"},"
-    # strResultat=strResultat[:-1]+']'
-    # print(fichier.getColumnDistinct(Name))
-    # print(fichier.isColumnNumeric(Name))
     return render_template("Show_Graph.html", resultat = resultat) 
 
 @app.route("/Error_Page", methods=["GET", "POST"])
@@ -392,10 +345,7 @@ def Error_Page(error):
     """error page"""
     return render_template("Error_Page.html", error=error)
 
-if __name__ == "__main__":
-    # fichier=File('')
-    # fichier.copyToSQLite("files\\Database.db")
-    # fichier.getData("Nom")    
+if __name__ == "__main__":    
     app.run()
     try:
         deleteDatabase()
