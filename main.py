@@ -11,7 +11,6 @@ import requests
 import os
 import pandas as pd
 import openpyxl
-from sqlalchemy import Column
 
 app = Flask(__name__)
 
@@ -320,6 +319,7 @@ def Selection():
     """select a title of csv file"""
     global fichier
     Filters = []
+    FiltersValues = []
     Columns = []
     if len(request.form)==0:
         if fichier is None:
@@ -350,18 +350,19 @@ def Selection():
                 return redirect('/Import_CSV')
     for i in range(9):
         Filters.append(Titles[i])
+        FiltersValues.append(fichier.getColumnDistinct(Titles[i]))
     for i in range(9, len(Titles)):
         Columns.append(Titles[i])
-    filter1 = fichier.getColumnDistinct(Titles[0])
-    filter2 = fichier.getColumnDistinct(Titles[1])
-    filter3 = fichier.getColumnDistinct(Titles[2])
-    filter4 = fichier.getColumnDistinct(Titles[3])
-    filter5 = fichier.getColumnDistinct(Titles[4])
-    filter6 = fichier.getColumnDistinct(Titles[5])
-    filter7 = fichier.getColumnDistinct(Titles[6])
-    filter8 = fichier.getColumnDistinct(Titles[7])
-    filter9 = fichier.getColumnDistinct(Titles[8])
-    return render_template("Selection.html", Filters = Filters, Columns = Columns, filter1 = filter1, filter2 = filter2, filter3 = filter3, filter4 = filter4, filter5 = filter5, filter6 = filter6, filter7 = filter7, filter8 = filter8, filter9 = filter9)
+    # filter1 = fichier.getColumnDistinct(Titles[0])
+    # filter2 = fichier.getColumnDistinct(Titles[1])
+    # filter3 = fichier.getColumnDistinct(Titles[2])
+    # filter4 = fichier.getColumnDistinct(Titles[3])
+    # filter5 = fichier.getColumnDistinct(Titles[4])
+    # filter6 = fichier.getColumnDistinct(Titles[5])
+    # filter7 = fichier.getColumnDistinct(Titles[6])
+    # filter8 = fichier.getColumnDistinct(Titles[7])
+    # filter9 = fichier.getColumnDistinct(Titles[8])
+    return render_template("Selection.html", Filters = Filters, Columns = Columns, FiltersValues = FiltersValues, filtersLen=len(Filters))
 
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
@@ -369,11 +370,11 @@ def Show_Graph():
     Table = fichier.getFileName()
     Filter = request.form.get("filter")
     Column = request.form.get("column")
-    data = fichier.getData(Name)
+    # data = fichier.getData(Name)
     # print(fichier.getOccurence(Name))
     # print(fichier.getPieDataSum([['0105_humanites_litterature_et_philosophie_filles','0105_humanites_litterature_et_philosophie_garcons'],'0300_langues_litterature_et_cultures_etrangeres_et_regionales_filles','0300_langues_litterature_et_cultures_etrangeres_et_regionales_garcons'],{'rentree_scolaire':'2021','numero_etablissement':'0331503E'}))
-    print(fichier.getColumnDistinct(Name))
-    print(fichier.isColumnNumeric(Name))
+    # print(fichier.getColumnDistinct(Name))
+    # print(fichier.isColumnNumeric(Name))
     return render_template("Show_Graph.html", data=data) 
 
 @app.route("/Error_Page", methods=["GET", "POST"])
