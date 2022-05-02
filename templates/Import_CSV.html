@@ -6,10 +6,11 @@
     <link href="/static/style.css" rel="stylesheet" type="text/css"/>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa&amp;display=swap" rel="stylesheet">
+    <title>Students tracker</title>
   </head>
-  <body>
+  <body class="csv-center">
     <form method="POST" action="Selection">
-      <h1>Import CSV as link :</h1>
+      <h1>Importer un CSV a partir d'un lien :</h1>
       <div>
         <input type="url" name="link" class="input" value="https://www.data.gouv.fr/fr/datasets/r/7a2ad28a-0e2a-4c69-84f0-c703448b60f9">
       </div>
@@ -17,7 +18,7 @@
         <table>
             <th>
                 <td>
-                    <a href="/" class="button">Return</a>
+                    <a href="/" class="button">Retour</a>
                 </td>
                 <td>
                     <input id="Show-Graph" class="hide-input" type="submit">

@@ -64,3 +64,11 @@ table{
   padding: 0.25em 1em;
   margin: 0.5em;
 }
+
+.center{
+  margin-top: 20%;
+}
+
+.csv-center{
+  margin-top: 15%;
+}

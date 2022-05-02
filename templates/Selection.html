@@ -6,9 +6,10 @@
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa&amp;display=swap" rel="stylesheet">
+    <title>Students tracker</title>
   </head>
   <body>
-    <h1>Filters</h1>
+    <h1>Filtres</h1>
       <form method="POST" action="Show_Graph">
         {% for i in range (0,filtersLen) %}
         <div id="{{Filters[i]}}" class="input-selec">
@@ -22,14 +23,14 @@
         </div>
         {% endfor %}
       <div>
-      <h1>Columns</h1>
+      <h1>Colonnes</h1>
         {% for x in Columns %}
         <div class="input-selec">
           <input name="Column_{{x}}" id="Column_{{x}}" type="checkbox" value="{{x}}">
           <label for="Column_{{x}}">{{x}}</label>
         </div>
         {% endfor %}
-        <input class="button" type="submit" value="select">
+        <input class="button" type="submit" value="Afficher le graphrique">
       </form>
     </div>
   </body>
