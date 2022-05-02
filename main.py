@@ -246,9 +246,11 @@ class File:
             req+=' WHERE {}'.format(where[:-4])
         print(req)
         data=cur.execute(req).fetchone()
+        print(data)
         lstData={}
-        for column in rcolumns:
-            lstData[column]=int(data[column])
+        if data is not None:
+            for column in rcolumns:
+                lstData[column]=int(data[column])
         return lstData
 
     def getColumnDistinct(self,column):
