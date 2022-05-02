@@ -252,7 +252,7 @@ class File:
         return lstData
 
     def getColumnDistinct(self,column):
-        """get the distinct value of a column"""
+        """get the distinct values of one column of the sqlite db"""
         con=sqlite3.connect("files\\Database.db")
         cur = con.cursor()
         req='SELECT DISTINCT "{}" FROM "{}" ORDER BY "{}"'.format(column,self.getFileName(),column)
@@ -290,7 +290,11 @@ def Import_CSV():
 
 @app.route("/Selection", methods=["GET", "POST"])
 def Selection():
-    """select a title of csv file"""
+    """selection page of filter and columns
+
+    Returns:
+        flask function: selection page
+    """
     global fichier
     Filters = []
     FiltersValues = []
@@ -331,7 +335,7 @@ def Selection():
 
 @app.route("/Show_Graph", methods=["GET", "POST"])
 def Show_Graph():
-    """show a graph"""
+    """show the graph of the selected columns"""
     Filter = {}
     Column = []
     for i in request.form :
@@ -344,7 +348,7 @@ def Show_Graph():
 
 @app.route("/Error_Page", methods=["GET", "POST"])
 def Error_Page(error):
-    """error page"""
+    """error page (unused)"""
     return render_template("Error_Page.html", error=error)
 
 if __name__ == "__main__":    
