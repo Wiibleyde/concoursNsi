@@ -357,3 +357,5 @@ if __name__ == "__main__":
         deleteDatabase()
     except FileNotFoundError:
         print("Database not found")
+    except PermissionError:
+        print("Database not deleted")
