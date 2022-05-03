@@ -9,7 +9,7 @@
     <title>Students tracker</title>
   </head>
   <body class="csv-center">
-    <form method="POST" action="Selection">
+    <form method="POST" action="Selection" id="selectForm">
       <h1>Importer un CSV a partir d'un lien :</h1>
       <div>
         <input type="url" name="link" class="input" value="https://www.data.gouv.fr/fr/datasets/r/7a2ad28a-0e2a-4c69-84f0-c703448b60f9">
@@ -21,18 +21,18 @@
                     <a href="/" class="button">Retour</a>
                 </td>
                 <td>
-                    <input id="Show-Graph" class="hide-input" type="submit">
-                    <label for="Show-Graph" class="button">Sélection</label>
+                    <input id="Show-Graph" class="hide-input" type="submit" onclick="envoi();this.disabled=true;">
+                    <label for="Show-Graph" class="button" id="labelSubmit">Sélection</label>
                 </td>
             </th>
         </table>
       </div>
     </form>
-    <script src="/static/script.js"></script>
   </body>
   <script>
-    function disableAfterClick() {
-      document.getElementById("Show-Graph").disabled = true;
+    function envoi() {
+      document.getElementById("labelSubmit").innerHTML = "Chargement...";
+      document.getElementById("selectForm").submit();
     }
   </script>
 </html>

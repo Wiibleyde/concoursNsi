@@ -20,6 +20,7 @@ class File:
         """
         self.fileName = fileName
         if 'http' in fileName:
+            print('http found')
             self.fileName=self.download(fileName)
             if not self.fileName:
                 print("This file is not a csv file")
