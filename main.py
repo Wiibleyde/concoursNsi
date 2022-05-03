@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, g, redirect
 import sqlite3
 import csv
+import jinja2
 import requests
 import os
 import pandas as pd
@@ -248,9 +249,11 @@ class File:
         data=cur.execute(req).fetchone()
         print(data)
         lstData={}
-        if data is not None:
-            for column in rcolumns:
+        for column in rcolumns:
+            try:
                 lstData[column]=int(data[column])
+            except TypeError:
+                return False
         return lstData
 
     def getColumnDistinct(self,column):
@@ -346,7 +349,11 @@ def Show_Graph():
         elif i[:7] == "Column_":
             Column.append(request.form.get(i))
     resultat = fichier.getPieDataSum(Column, Filter)
-    return render_template("Show_Graph.html", resultat = resultat) 
+    try:
+        return render_template("Show_Graph.html", resultat = resultat) 
+    except jinja2.exceptions.UndefinedError:
+        resultat={}
+        return render_template("Show_Graph.html", resultat = resultat)
 
 @app.route("/Error_Page", methods=["GET", "POST"])
 def Error_Page(error):
