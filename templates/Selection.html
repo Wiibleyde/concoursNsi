@@ -9,27 +9,35 @@
     <title>Students tracker</title>
   </head>
   <body>
-    <h1>Filtres</h1>
+    <h1>Sélectionnez les filtres et les colonnes que vous souhaitez étudier</h1>
       <form method="POST" action="Show_Graph">
-        {% for i in range (0,filtersLen) %}
-        <div id="{{Filters[i]}}" class="input-selec">
-          <label for="{{Filters[i]}}">{{Filters[i]}}: </label>
-          <select name="Select_{{Filters[i]}}" id="{{Filters[i]}}">
-            <option value="">--</option>
-            {% for x in FiltersValues[i] %}
-            <option>{{x}}</option>
-            {% endfor %}
-          </select>
-        </div>
-        {% endfor %}
-      <div>
-      <h1>Colonnes</h1>
-        {% for x in Columns %}
-        <div class="input-selec">
-          <input name="Column_{{x}}" id="Column_{{x}}" type="checkbox" value="{{x}}">
-          <label for="Column_{{x}}">{{x}}</label>
-        </div>
-        {% endfor %}
+        <table>
+          <tr>
+            <td class="table-left">
+              <h1>Filtres</h1>
+              {% for i in range (0,filtersLen) %}
+              <div id="{{Filters[i]}}" class="input-selec">
+                <label for="{{Filters[i]}}">{{Filters[i]}}: </label>
+                <select name="Select_{{Filters[i]}}" id="{{Filters[i]}}">
+                  <option value="">--</option>
+                  {% for x in FiltersValues[i] %}
+                  <option>{{x}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              {% endfor %}
+            </td>
+            <td class="table-right">
+              <h1>Colonnes</h1>
+              {% for x in Columns %}
+                <div class="input-selec">
+                  <label for="Column_{{x}}">{{x}}</label>
+                  <input name="Column_{{x}}" id="Column_{{x}}" type="checkbox" value="{{x}}">
+                </div>
+              {% endfor %}
+            </td>
+        </tr>
+      </table>
         <input class="button" type="submit" value="Afficher le graphique">
       </form>
     </div>
