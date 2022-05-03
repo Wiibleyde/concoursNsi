@@ -276,6 +276,11 @@ class File:
             if ele!='' and not ele.isdecimal():
                 return False
         return True
+    
+    def deleteFile(self):
+        """delete the file"""
+        os.remove(self.fileName)
+        print(f'{self.fileName} deleted')
         
 def deleteDatabase():
     """delete the database named 'Database.db'
@@ -304,6 +309,7 @@ def Selection():
     Filters = []
     FiltersValues = []
     Columns = []
+    inWork=True
     if len(request.form)==0:
         if fichier is None:
             print('redirect')
@@ -368,3 +374,12 @@ if __name__ == "__main__":
         print("Database not found")
     except PermissionError:
         print("Database not deleted")
+    
+    try:
+        fichier.deleteFile()
+    except NameError:
+        print("No file to delete")
+    except FileNotFoundError:
+        print("File not found")
+    except PermissionError:
+        print("File not deleted")
