@@ -4,7 +4,6 @@ import csv
 import jinja2
 import requests
 import os
-import pandas as pd
 import openpyxl
 
 app = Flask(__name__)
@@ -211,7 +210,7 @@ class File:
         """return a dict with column and value of pie chart
 
         Args:
-            columns (lst): list of columns| each element can be a string or a list of string
+            columns (lst): list of columns| each element can be a string (column name) or a list of string (list of column names)
             filter (dict, optional): dict of filter to apply to DBase. Defaults to None.
 
         Returns:
