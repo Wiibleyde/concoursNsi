@@ -36,7 +36,6 @@ class File:
         if fileName is None:
             fileName=self.fileName
         try:
-            print(fileName)
             with open(fileName, 'r') as f:
                 first_line = f.readline()
                 if ',' in first_line or ';' in first_line:
@@ -103,7 +102,6 @@ class File:
             str: name of the file
         """
         if 'http' in self.fileName:
-            print('http found')
             return self.fileName.split('/')[-1].split('.')[0]
         else:
             return self.fileName.split('\\')[-1].split('.')[0]
@@ -129,7 +127,6 @@ class File:
             firstRow=next(sheet.rows)
             for c in firstRow:
                 cols.append(c.value)
-            print(cols)
             for compteur in range(len(cols)):
                 if cols[compteur] is not None:
                     cols[compteur]="'"+cols[compteur].replace(' ','_')+"'"
@@ -150,7 +147,6 @@ class File:
                 reader = csv.reader(f, delimiter=';')
                 con = sqlite3.connect(dbName)
                 cur = con.cursor()
-                con.set_trace_callback(print)
                 cur.execute("DROP TABLE IF EXISTS '{}'".format(self.getFileName()))
                 cur.execute("CREATE TABLE '{}' ({})".format(self.getFileName(),','.join(self.fieldNames())))
                 next(reader)
@@ -163,7 +159,6 @@ class File:
             sheet = excel.active
             con = sqlite3.connect(dbName)
             cur = con.cursor()
-            con.set_trace_callback(print)
             cur.execute("DROP TABLE IF EXISTS '{}'".format(self.getFileName()))
             cur.execute("CREATE TABLE '{}' ({})".format(self.getFileName(),','.join(self.fieldNames())))
             for r in sheet.rows:
@@ -245,9 +240,7 @@ class File:
             for k in filter.keys():
                 where+='"{}"="{}" AND '.format(k,filter[k])
             req+=' WHERE {}'.format(where[:-4])
-        print(req)
         data=cur.execute(req).fetchone()
-        print(data)
         lstData={}
         for column in rcolumns:
             try:
